@@ -23,48 +23,51 @@ public class Pawn extends AbstractPiece {
         // A valid move for a pawn is move up one space OR move down one space (black)
             // This doesn't take into account:
                 // Taking
-                // First move = 2 space allowance
                 // Will allow the piece to go off the board
         if (this.colour == PlayerColour.WHITE) {
-            validMoves.add(
-                    new Move(
-                            from,
-                            new Coordinates(
-                                    from.getRow() - 1,
-                                    from.getCol())
-                    )
-            );
-
-            if (from.getRow() == WHITE_STARTING_ROW) {
+            if (board.get(from.plus(-1, 0)) == null) {
                 validMoves.add(
                         new Move(
                                 from,
                                 new Coordinates(
-                                        from.getRow() - 2,
-                                        from.getCol()
-                                )
-                        )
-                );
-            }
-        } else {
-            validMoves.add(
-                    new Move(
-                            from,
-                            new Coordinates(
-                                    from.getRow() + 1,
-                                    from.getCol())
-                    )
-            );
-
-            if (from.getRow() == BLACK_STARTING_ROW) {
-                validMoves.add(
-                        new Move(
-                                from,
-                                new Coordinates(
-                                        from.getRow() + 2,
+                                        from.getRow() - 1,
                                         from.getCol())
                         )
                 );
+
+                if (from.getRow() == WHITE_STARTING_ROW) {
+                    validMoves.add(
+                            new Move(
+                                    from,
+                                    new Coordinates(
+                                            from.getRow() - 2,
+                                            from.getCol()
+                                    )
+                            )
+                    );
+                }
+            }
+        } else {
+            if (board.get(from.plus(1, 0)) == null) {
+                validMoves.add(
+                        new Move(
+                                from,
+                                new Coordinates(
+                                        from.getRow() + 1,
+                                        from.getCol())
+                        )
+                );
+
+                if (from.getRow() == BLACK_STARTING_ROW) {
+                    validMoves.add(
+                            new Move(
+                                    from,
+                                    new Coordinates(
+                                            from.getRow() + 2,
+                                            from.getCol())
+                            )
+                    );
+                }
             }
         }
 
