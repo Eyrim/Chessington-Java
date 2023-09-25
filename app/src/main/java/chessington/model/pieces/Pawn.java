@@ -19,16 +19,24 @@ public class Pawn extends AbstractPiece {
         final int direction = this.colour == PlayerColour.WHITE ? -1 : 1;
         Coordinates oneStep = from.plus(direction, 0);
         Coordinates twoSteps = from.plus(direction * 2, 0);
+        Coordinates rightDiagonal = from.plus(direction, 1);
+        Coordinates leftDiagonal = from.plus(direction, -1);
 
         // A valid move for a pawn is move up one space OR move down one space (black)
         // Or two spaces if first move
-        if (isWithinBoardBoundaries(from, direction)) {
-            if (!isPieceInSquare(from, direction, board)) {
+        if (isWithinBoardBoundaries(oneStep) && isWithinBoardBoundaries(twoSteps)) {
+            if (!isPieceInSquare(oneStep, board, this.colour)) {
                 validMoves.add(new Move(from, oneStep));
+            }
+            if (isWithinBoardBoundaries(leftDiagonal) && isPieceInSquare(leftDiagonal, board, this.colour)) {
+                validMoves.add(new Move(from, leftDiagonal));
+            }
+            if (isWithinBoardBoundaries(rightDiagonal) && isPieceInSquare(rightDiagonal, board, this.colour)) {
+                validMoves.add(new Move(from, rightDiagonal));
             }
 
             // First turn movement allows two squares, so check two squares in front
-            if (!isPieceInSquare(from, direction * 2, board)) {
+            if (!isPieceInSquare(oneStep, board, this.colour) && !isPieceInSquare(twoSteps, board, this.colour)) {
                 if (isFirstMove(from)) {
                     validMoves.add(new Move(from, twoSteps));
                 }
@@ -38,20 +46,24 @@ public class Pawn extends AbstractPiece {
         return validMoves;
     }
 
-    private boolean isWithinBoardBoundaries(Coordinates from, int direction) {
-        final int TOP_OF_BOARD = 0;
-        final int BOTTOM_OF_BOARD = 7;
+    private boolean isWithinBoardBoundaries(Coordinates square) {
+        final int TOP_OF_BOARD = 0; // Row
+        final int BOTTOM_OF_BOARD = 7; // Row
+        final int LEFT_OF_BOARD = 0; // Col
+        final int RIGHT_OF_BOARD = 7; // Col
 
-        if ((from.getRow() + direction >= TOP_OF_BOARD) &&
-                (from.getRow() + direction <= BOTTOM_OF_BOARD)) {
+        if ((square.getRow() >= TOP_OF_BOARD) && (square.getRow() <= BOTTOM_OF_BOARD) &&
+                ((square.getCol() >= LEFT_OF_BOARD) && (square.getCol() <= RIGHT_OF_BOARD))) {
             return true;
         }
 
         return false;
     }
 
-    private boolean isPieceInSquare(Coordinates from, int direction, Board board) {
-        if (board.get(from.plus(direction, 0)) != null) {
+    private boolean isPieceInSquare(Coordinates square, Board board, PlayerColour colour) {
+        Piece inSquare = board.get(square);
+
+        if (inSquare != null && inSquare.getColour() != colour) {
             return true;
         }
 
