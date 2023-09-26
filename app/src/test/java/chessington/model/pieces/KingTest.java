@@ -15,22 +15,22 @@ import static org.assertj.core.api.Assertions.*;
 
 public class KingTest {
     @Test
-    public void whiteKingCanMoveUpOneSquare() {
+    public void blackKingCanMoveDownOneSquare() {
         // Arrange
         Board board = Board.empty();
-        Piece king = new King(PlayerColour.WHITE);
-        Coordinates coords = new Coordinates(7, 4);
+        Piece king = new King(PlayerColour.BLACK);
+        Coordinates coords = new Coordinates(0, 4);
         board.placePiece(coords, king);
 
         // Act
         List<Move> moves = king.getAllowedMoves(coords, board);
 
         // Assert
-        assertThat(moves).contains(new Move(coords, coords.plus(-1, 0)));
+        assertThat(moves).contains(new Move(coords, coords.plus(1, 0)));
     }
 
     @Test
-    public void whiteKingCanMoveDownOneSquare() {
+    public void whiteKingCanMoveUpOneSquare() {
         // Arrange
         Board board = Board.empty();
         Piece king = new King(PlayerColour.WHITE);
@@ -42,29 +42,7 @@ public class KingTest {
         List<Move> moves = king.getAllowedMoves(coords, board);
 
         // Assert
-        assertThat(moves).contains(new Move(coords, coords.plus(1, 0)));
-    }
-
-    @Test
-    public void kingsCannotMoveIfPieceInFront() {
-        // Arrange
-        Board board = Board.empty();
-
-        Piece whiteKing = new King(PlayerColour.WHITE);
-        Coordinates whiteCoords = new Coordinates(3, 4);
-        board.placePiece(whiteCoords, whiteKing);
-
-        Piece blackKing = new King(PlayerColour.BLACK);
-        Coordinates blackCoords = new Coordinates(4, 4);
-        board.placePiece(blackCoords, blackKing);
-
-        // Act
-        List<Move> whiteMoves = whiteKing.getAllowedMoves(whiteCoords, board);
-        List<Move> blackMoves = blackKing.getAllowedMoves(blackCoords, board);
-
-        // Assert
-        assertThat(whiteMoves).doesNotContain(new Move(whiteCoords, blackCoords));
-        assertThat(blackMoves).doesNotContain(new Move(blackCoords, whiteCoords));
+        assertThat(moves).contains(new Move(coords, coords.plus(-1, 0)));
     }
 
     @Test

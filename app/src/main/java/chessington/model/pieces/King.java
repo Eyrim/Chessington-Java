@@ -16,7 +16,7 @@ public class King extends AbstractPiece {
     @Override
     public List<Move> getAllowedMoves(Coordinates from, Board board) {
         final List<Move> validMoves = new ArrayList<>();
-        final int direction = this.colour == PlayerColour.WHITE ? -1 : 1;
+        final int direction = this.colour.DIRECTION_SCALAR;
         final List<Coordinates> surroundings = List.of(
                 // ups and downs
                 from.plus(direction, 0),
@@ -32,11 +32,24 @@ public class King extends AbstractPiece {
         );
 
         for (Coordinates coords : surroundings) {
-            if (isWithinBoardBoundaries(coords) && !isPieceInSquare(coords, board, this.colour)) {
-                validMoves.add(new Move(from, coords));
+            // If the square is empty
+            // OR if the square has an enemy in
+            if (isWithinBoardBoundaries(coords)) {
+                if (board.get(coords) == null ||
+                        board.get(coords).getColour() != this.colour) {
+                    validMoves.add(new Move(from, coords));
+                }
             }
         }
 
         return validMoves;
+    }
+
+    private PlayerColour invertColour(PlayerColour colour) {
+        if (colour == PlayerColour.BLACK) {
+            return PlayerColour.WHITE;
+        }
+
+        return PlayerColour.BLACK;
     }
 }

@@ -31,14 +31,20 @@ public interface Piece {
         return false;
     }
 
-    public default boolean isPieceInSquare(Coordinates square, Board board, PlayerColour colour) {
-        Piece inSquare = board.get(square);
+    /**
+     * <pre>
+     *     Checks if there is a piece of the opposite colour in the given square on the given board.
+     * </pre>
+     * @param square
+     * @param board
+     * @param colour
+     * @return
+     */
+    public default boolean isEnemyPieceInSquare(Coordinates square, Board board, PlayerColour colour) {
+        Piece piece = board.get(square);
 
-        if (inSquare != null && inSquare.getColour() != colour) {
-            return true;
-        }
-
-        return false;
+        // If there is a piece AND it is of a different square to the caller
+        return piece != null && piece.getColour() != colour;
     }
 
     public default boolean isFirstMove(Coordinates from, PlayerColour colour) {
