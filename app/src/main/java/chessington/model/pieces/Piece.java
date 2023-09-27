@@ -47,6 +47,10 @@ public interface Piece {
         return piece != null && piece.getColour() != colour;
     }
 
+    public default Piece getPieceInSquare(Coordinates square, Board board) {
+        return board.get(square);
+    }
+
     public default boolean isFirstMove(Coordinates from, PlayerColour colour) {
         final int WHITE_STARTING_ROW = 6;
         final int BLACK_STARTING_ROW = 1;
